@@ -3,6 +3,7 @@ CREATE TABLE "usuarios" (
   "apelido" VARCHAR(128) UNIQUE NOT NULL,
   "primeiro_nome" VARCHAR(128) NOT NULL,
   "sobrenome" VARCHAR(128) NOT NULL,
+  "email" TEXT NOT NULL UNIQUE,
   "senha_hash" TEXT NOT NULL,
   "bio" TEXT,
   "data_cadastro" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -73,7 +74,7 @@ CREATE TABLE "listas" (
   "usuario_id" INT NOT NULL REFERENCES "usuarios" ("id") ON DELETE CASCADE,
   "titulo" VARCHAR(128) NOT NULL,
   "descricao" TEXT,
-  "publica" BOOLEAN NOT NULL,
+  "publica" BOOLEAN NOT NULL DEFAULT TRUE,
   "criada_em" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 

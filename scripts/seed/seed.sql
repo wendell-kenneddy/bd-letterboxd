@@ -16,7 +16,9 @@ INSERT INTO "paises" ("codigo", "nome") VALUES
   ('GBR', 'Reino Unido'),
   ('FRA', 'França'),
   ('JPN', 'Japão'),
-  ('NZL', 'Nova Zelândia');
+  ('NZL', 'Nova Zelândia'),
+  ('ESP', 'Espanha'),
+  ('IRL', 'Irlanda');
 
 -- idiomas (PK textual BCP 47)
 INSERT INTO "idiomas" ("codigo", "nome") VALUES
@@ -40,13 +42,13 @@ INSERT INTO "generos" ("nome") VALUES
 -- usuarios (tabela principal)
 -- senha_hash são placeholders representando hashes bcrypt.
 -- -----------------------------------------------------------------------------
-INSERT INTO "usuarios" ("apelido", "primeiro_nome", "sobrenome", "senha_hash", "bio") VALUES
-  ('cinefilo_wk',  'Wendell',  'Kenneddy', '$2b$12$abcdefghijklmnopqrstuv01', 'Maratonando clássicos.'), -- 1
-  ('jv_filmes',    'Jeremias', 'Victor',   '$2b$12$abcdefghijklmnopqrstuv02', 'Fã de ficção científica.'), -- 2
-  ('ana.reviews',  'Ana',      'Souza',    '$2b$12$abcdefghijklmnopqrstuv03', NULL),                       -- 3
-  ('bruno_movies', 'Bruno',    'Lima',     '$2b$12$abcdefghijklmnopqrstuv04', 'Crítico amador.'),          -- 4
-  ('carla_c',      'Carla',    'Mendes',   '$2b$12$abcdefghijklmnopqrstuv05', 'Listas temáticas.'),        -- 5
-  ('diego.f',      'Diego',    'Ferreira', '$2b$12$abcdefghijklmnopqrstuv06', NULL);                       -- 6
+INSERT INTO "usuarios" ("apelido", "primeiro_nome", "sobrenome", "email", "senha_hash", "bio") VALUES
+  ('cinefilo_wk',  'Wendell',  'Kenneddy', 'wendell@example.com', '$2b$12$abcdefghijklmnopqrstuv01', 'Maratonando clássicos.'), -- 1
+  ('jv_filmes',    'Jeremias', 'Victor',   'jeremias@example.com', '$2b$12$abcdefghijklmnopqrstuv02', 'Fã de ficção científica.'), -- 2
+  ('ana.reviews',  'Ana',      'Souza',    'ana@example.com',      '$2b$12$abcdefghijklmnopqrstuv03', NULL),                       -- 3
+  ('bruno_movies', 'Bruno',    'Lima',     'bruno@example.com',    '$2b$12$abcdefghijklmnopqrstuv04', 'Crítico amador.'),          -- 4
+  ('carla_c',      'Carla',    'Mendes',   'carla@example.com',    '$2b$12$abcdefghijklmnopqrstuv05', 'Listas temáticas.'),        -- 5
+  ('diego.f',      'Diego',    'Ferreira', 'diego@example.com',    '$2b$12$abcdefghijklmnopqrstuv06', NULL);                       -- 6
 
 -- -----------------------------------------------------------------------------
 -- usuarios_seguidores (associativa) - >= 10 tuplas
@@ -71,13 +73,22 @@ INSERT INTO "usuarios_seguidores" ("usuario_seguido", "usuario_seguidor") VALUES
 -- -----------------------------------------------------------------------------
 INSERT INTO "personalidades" ("nome", "nacionalidade", "bio") VALUES
   ('Christopher Nolan',  'GBR', 'Diretor e roteirista britânico-americano.'),     -- 1
-  ('Cillian Murphy',     'GBR', 'Ator irlandês, recorrente em filmes de Nolan.'), -- 2 (irlandês; usa GBR p/ simplificar)
+  ('Cillian Murphy',     'IRL', 'Ator irlandês, recorrente em filmes de Nolan.'), -- 2
   ('Quentin Tarantino',  'USA', 'Diretor e roteirista; às vezes atua.'),          -- 3
   ('Hayao Miyazaki',     'JPN', 'Diretor e animador do Studio Ghibli.'),          -- 4
   ('Fernanda Montenegro','BRA', 'Atriz brasileira premiada.'),                    -- 5
   ('Walter Salles',      'BRA', 'Diretor brasileiro.'),                           -- 6
   ('Peter Jackson',      'NZL', 'Diretor neozelandês.'),                          -- 7
-  ('Marion Cotillard',   'FRA', 'Atriz francesa.');                               -- 8
+  ('Marion Cotillard',   'FRA', 'Atriz francesa.'),                               -- 8
+  ('Lana Wachowski',     'USA', 'Cineasta estadunidense; co-dirigiu Matrix.'),       -- 9
+  ('Lilly Wachowski',    'USA', 'Cineasta estadunidense; co-dirigiu Matrix.'),       -- 10
+  ('Joel Coen',          'USA', 'Cineasta estadunidense; dupla com Ethan Coen.'),    -- 11
+  ('Ethan Coen',         'USA', 'Cineasta estadunidense; dupla com Joel Coen.'),     -- 12
+  ('Keanu Reeves',       'USA', 'Ator; protagonista de Matrix.'),                    -- 13
+  ('John Travolta',      'USA', 'Ator estadunidense.'),                              -- 14
+  ('Samuel L. Jackson',  'USA', 'Ator estadunidense.'),                              -- 15
+  ('Tommy Lee Jones',    'USA', 'Ator estadunidense.'),                              -- 16
+  ('Javier Bardem',      'ESP', 'Ator espanhol.');                                   -- 17
 
 -- -----------------------------------------------------------------------------
 -- filmes (tabela principal) - idioma_original -> idiomas
@@ -89,7 +100,9 @@ INSERT INTO "filmes" ("titulo", "sinopse", "idioma_original", "duracao_minutos",
   ('A Viagem de Chihiro',   'Uma garota presa num mundo espiritual.',                        'ja',    125, 'https://cdn.example/chihiro.jpg',       2001), -- 4
   ('Central do Brasil',     'Uma ex-professora ajuda um menino a procurar o pai.',           'pt-BR', 110, 'https://cdn.example/central.jpg',       1998), -- 5
   ('O Senhor dos Anéis: A Sociedade do Anel', 'Um hobbit parte numa jornada para destruir um anel.', 'en', 178, 'https://cdn.example/lotr.jpg', 2001), -- 6
-  ('Diários de Motocicleta','A viagem que transformou o jovem Che Guevara.',                 'es',    126, 'https://cdn.example/diarios.jpg',       2004); -- 7
+  ('Diários de Motocicleta','A viagem que transformou o jovem Che Guevara.',                 'es',    126, 'https://cdn.example/diarios.jpg',       2004), -- 7
+  ('Matrix',                'Um hacker descobre a verdade sobre sua realidade simulada.',    'en',    136, 'https://cdn.example/matrix.jpg',        1999), -- 8
+  ('Onde os Fracos Não Têm Vez','Um caçador encontra dinheiro de um negócio de drogas e vira alvo.', 'en', 122, 'https://cdn.example/nocountry.jpg', 2007); -- 9
 
 -- -----------------------------------------------------------------------------
 -- filmes_generos (associativa) - >= 10 tuplas
@@ -101,11 +114,13 @@ INSERT INTO "filmes_generos" ("filme_id", "genero_id") VALUES
   (4, 4), (4, 5),          -- Chihiro: Animação, Aventura
   (5, 1),                  -- Central do Brasil: Drama
   (6, 5), (6, 1),          -- LOTR: Aventura, Drama
-  (7, 1), (7, 5);          -- Diários: Drama, Aventura
+  (7, 1), (7, 5),          -- Diários: Drama, Aventura
+  (8, 2), (8, 5),          -- Matrix: FicCient, Aventura
+  (9, 3), (9, 6);          -- Onde os Fracos Não Têm Vez: Crime, Suspense
 
 -- -----------------------------------------------------------------------------
 -- filmes_diretores (associativa) - >= 10 tuplas
--- Inclui filme com mais de um diretor (filme 7)
+-- Inclui filme com mais de um diretor (filme 8 - Matrix, co-dirigido pelas Wachowski)
 -- -----------------------------------------------------------------------------
 INSERT INTO "filmes_diretores" ("filme_id", "diretor_id") VALUES
   (1, 1),   -- A Origem - Nolan
@@ -115,38 +130,39 @@ INSERT INTO "filmes_diretores" ("filme_id", "diretor_id") VALUES
   (5, 6),   -- Central do Brasil - Walter Salles
   (6, 7),   -- LOTR - Peter Jackson
   (7, 6),   -- Diários - Walter Salles
-  (7, 1),   -- Diários - co-direção fictícia (Nolan) p/ ilustrar multi-diretor
-  (6, 1),   -- LOTR - co-direção fictícia
-  (2, 3);   -- Oppenheimer - co-direção fictícia (Tarantino)
+  (8, 9),   -- Matrix - Lana Wachowski
+  (8, 10),  -- Matrix - Lilly Wachowski (co-direção real)
+  (9, 11),  -- Onde os Fracos Não Têm Vez - Joel Coen
+  (9, 12);  -- Onde os Fracos Não Têm Vez - Ethan Coen (co-direção real)
 
 -- -----------------------------------------------------------------------------
 -- filmes_atores (associativa) - >= 10 tuplas
--- personagem faz parte da PK: mesmo ator pode ter +1 papel no mesmo filme.
--- Tarantino (3) aparece como diretor E ator (filme 3).
+-- personagem faz parte da PK.
+-- Tarantino (3) aparece como diretor E ator (filme 3 - Pulp Fiction).
 -- -----------------------------------------------------------------------------
 INSERT INTO "filmes_atores" ("filme_id", "ator_id", "personagem") VALUES
-  (1, 2, 'Robert Fischer'),           -- Cillian Murphy em A Origem
-  (1, 8, 'Mal'),                      -- Marion Cotillard em A Origem
-  (2, 2, 'J. Robert Oppenheimer'),    -- Cillian Murphy em Oppenheimer
-  (3, 3, 'Jimmie Dimmick'),           -- Tarantino atuando em Pulp Fiction
-  (3, 3, 'Narrador'),                 -- mesmo ator, 2º papel no mesmo filme
-  (4, 5, 'Yubaba (dublagem)'),        -- Fernanda Montenegro (fictício) em Chihiro
-  (5, 5, 'Dora'),                     -- Fernanda Montenegro em Central do Brasil
-  (6, 2, 'Figurante de Bri'),         -- Cillian Murphy (fictício) em LOTR
-  (7, 8, 'Chichina'),                 -- Marion Cotillard (fictício) em Diários
-  (2, 8, 'Kitty Oppenheimer'),        -- Marion Cotillard em Oppenheimer
-  (4, 8, 'Mãe de Chihiro (dublagem)');-- 2º papel de Cotillard em filme distinto
+  (1, 2,  'Robert Fischer'),          -- Cillian Murphy em A Origem
+  (1, 8,  'Mal'),                     -- Marion Cotillard em A Origem
+  (2, 2,  'J. Robert Oppenheimer'),   -- Cillian Murphy em Oppenheimer
+  (2, 8,  'Kitty Oppenheimer'),       -- Marion Cotillard em Oppenheimer
+  (3, 3,  'Jimmie Dimmick'),          -- Tarantino atuando em Pulp Fiction
+  (3, 14, 'Vincent Vega'),            -- John Travolta em Pulp Fiction
+  (3, 15, 'Jules Winnfield'),         -- Samuel L. Jackson em Pulp Fiction
+  (5, 5,  'Dora'),                    -- Fernanda Montenegro em Central do Brasil
+  (8, 13, 'Neo'),                     -- Keanu Reeves em Matrix
+  (9, 16, 'Xerife Ed Tom Bell'),      -- Tommy Lee Jones em Onde os Fracos Não Têm Vez
+  (9, 15, 'Anton Chigurh');           -- Javier Bardem em Onde os Fracos Não Têm Vez
 
 -- -----------------------------------------------------------------------------
 -- listas (tabela principal) - usuario_id -> usuarios
 -- -----------------------------------------------------------------------------
 INSERT INTO "listas" ("usuario_id", "titulo", "descricao", "publica") VALUES
-  (1, 'Melhores do Nolan',        'Coletânea pessoal.',                 TRUE),  -- 1
-  (2, 'Ficção que mexe a cabeça', NULL,                                 TRUE),  -- 2
-  (3, 'Cinema brasileiro',        'Clássicos nacionais.',               TRUE),  -- 3
-  (4, 'Para rever no inverno',    'Lista privada.',                     FALSE), -- 4
-  (5, 'Animações atemporais',     'Sem idade para assistir.',           TRUE),  -- 5
-  (1, 'Watchlist secreta',        'Só pra mim.',                        FALSE); -- 6
+  (1, 'Melhores do Nolan',        'Coletânea pessoal.',                 DEFAULT), -- 1
+  (2, 'Ficção que mexe a cabeça', NULL,                                 DEFAULT), -- 2
+  (3, 'Cinema brasileiro',        'Clássicos nacionais.',               DEFAULT), -- 3
+  (4, 'Para rever no inverno',    'Lista privada.',                     FALSE),   -- 4
+  (5, 'Animações atemporais',     'Sem idade para assistir.',           DEFAULT), -- 5
+  (1, 'Watchlist secreta',        'Só pra mim.',                        FALSE);   -- 6
 
 -- -----------------------------------------------------------------------------
 -- listas_filmes (associativa) - >= 10 tuplas
