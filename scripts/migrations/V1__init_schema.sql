@@ -10,6 +10,9 @@ CREATE TABLE "usuarios" (
   "atualizado_em" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- Check impede que um usuário siga a si mesmo
+-- DEFERRABLE INITIALLY IMMEDIATE permite a troca da direção da associação, validando a constraint de CHECK
+-- somente no final da transação.
 CREATE TABLE "usuarios_seguidores" (
   "usuario_seguido" INT NOT NULL REFERENCES "usuarios" ("id") ON DELETE CASCADE DEFERRABLE INITIALLY IMMEDIATE,
   "usuario_seguidor" INT NOT NULL REFERENCES "usuarios" ("id") ON DELETE CASCADE DEFERRABLE INITIALLY IMMEDIATE,
@@ -19,7 +22,7 @@ CREATE TABLE "usuarios_seguidores" (
 );
 
 CREATE TABLE "paises" (
-  "codigo" CHAR(3) PRIMARY KEY,
+  "codigo"  VARCHAR(3) PRIMARY KEY,
   "nome" VARCHAR(128) UNIQUE NOT NULL
 );
 
@@ -45,8 +48,8 @@ CREATE TABLE "filmes" (
   "titulo" TEXT NOT NULL,
   "sinopse" TEXT NOT NULL,
   "idioma_original" VARCHAR(5) NOT NULL REFERENCES "idiomas" ("codigo"),
-  "duracao_minutos" INT NOT NULL,
-  "banner_url" TEXT NOT NULL,
+  "duracao_minutos" INT NOT NULL CHECK ("duracao_minutos" > 0),
+  "poster_url" TEXT NOT NULL,
   "ano_lancamento" INT NOT NULL
 );
 
@@ -78,6 +81,10 @@ CREATE TABLE "listas" (
   "criada_em" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- DEFERRABLE INITIALLY IMMEDIATE dá a opção de, numa transação, postergar a validação da constraint
+-- para a fase de commit, o que permite que duas tuplas ocupem a mesma posição numa lista de filmes,
+-- seguindo o fluxo de reordenação de tuplas existentes.
+-- Ex: (1, 2) -> (2, 2) -> (2, 1)
 CREATE TABLE "listas_filmes" (
   "lista_id" INT NOT NULL REFERENCES "listas" ("id") ON DELETE CASCADE,
   "filme_id" INT NOT NULL REFERENCES "filmes" ("id") ON DELETE CASCADE,
@@ -103,6 +110,9 @@ CREATE TABLE "visualizacoes" (
   "visto_em" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- Intencionalmente uma mesma "sessão" (assistir a um filme) pode ter mais de uma review.
+-- O ato de assistir novamente (criar uma nova tupla em "visualizacoes") levaria o sistema
+-- a cadastrar novas tuplas de "avaliacoes" relacionadas a sessão mais recente.
 CREATE TABLE "avaliacoes" (
   "id" INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   "visualizacao_id" INT NOT NULL REFERENCES "visualizacoes" ("id") ON DELETE CASCADE,

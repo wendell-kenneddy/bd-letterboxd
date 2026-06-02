@@ -8,14 +8,14 @@ ORDER BY "ano_lancamento" DESC, "titulo";
 SELECT f."titulo", p."nome" AS diretor
 FROM "filmes" f
 INNER JOIN "filmes_diretores" fd ON fd."filme_id" = f."id"
-INNER JOIN "personalidades" p   ON p."id" = fd."diretor_id"
+INNER JOIN "personalidades" p ON p."id" = fd."diretor_id"
 ORDER BY f."titulo", p."nome";
 
 -- Visualizações que NÃO geraram nenhuma review (assistido mas sem resenha).
 SELECT u."apelido", f."titulo", v."visto_em"
 FROM "visualizacoes" v
 INNER JOIN "usuarios" u ON u."id" = v."usuario_id"
-INNER JOIN "filmes" f   ON f."id" = v."filme_id"
+INNER JOIN "filmes" f ON f."id" = v."filme_id"
 LEFT JOIN "avaliacoes" a ON a."visualizacao_id" = v."id"
 WHERE a."id" IS NULL
 ORDER BY v."visto_em";
@@ -29,9 +29,9 @@ ORDER BY p."nome";
 
 -- Por filme, total de visualizações, quantas tiveram nota e a média.
 SELECT f."titulo",
-       COUNT(v."id")            AS total_visualizacoes,
-       COUNT(v."nota")          AS total_com_nota,
-       ROUND(AVG(v."nota"), 2)  AS nota_media
+       COUNT(v."id") AS total_visualizacoes,
+       COUNT(v."nota") AS total_com_nota,
+       ROUND(AVG(v."nota"), 2) AS nota_media
 FROM "filmes" f
 INNER JOIN "visualizacoes" v ON v."filme_id" = f."id"
 GROUP BY f."id", f."titulo"
@@ -49,7 +49,7 @@ ORDER BY nota_media DESC;
 SELECT u."apelido", f."titulo", v."nota", v."visto_em"
 FROM "visualizacoes" v
 INNER JOIN "usuarios" u ON u."id" = v."usuario_id"
-INNER JOIN "filmes" f   ON f."id" = v."filme_id"
+INNER JOIN "filmes" f ON f."id" = v."filme_id"
 WHERE v."nota" = (
     SELECT MAX(v2."nota")
     FROM "visualizacoes" v2
@@ -58,8 +58,7 @@ WHERE v."nota" = (
 ORDER BY u."apelido", f."titulo";
 
 -- Pares de "seguir mútuo" (A segue B e B segue A).
-SELECT seguidor."apelido" AS quem_segue,
-       seguido."apelido"  AS quem_e_seguido
+SELECT seguidor."apelido" AS quem_segue, seguido."apelido"  AS quem_e_seguido
 FROM "usuarios_seguidores" s
 INNER JOIN "usuarios" seguidor ON seguidor."id" = s."usuario_seguidor"
 INNER JOIN "usuarios" seguido  ON seguido."id"  = s."usuario_seguido"
@@ -67,7 +66,7 @@ WHERE EXISTS (
     SELECT 1
     FROM "usuarios_seguidores" s2
     WHERE s2."usuario_seguidor" = s."usuario_seguido"
-      AND s2."usuario_seguido"  = s."usuario_seguidor"
+    AND s2."usuario_seguido"  = s."usuario_seguidor"
 )
 ORDER BY quem_segue, quem_e_seguido;
 
@@ -95,16 +94,16 @@ ORDER BY f."titulo";
 
 -- View para reutilizar estatísticas de filmess.
 CREATE OR REPLACE VIEW "vw_estatisticas_filmes" AS
-SELECT f."id"                         AS filme_id,
+SELECT f."id" AS filme_id,
        f."titulo",
        f."ano_lancamento",
-       COUNT(v."id")         AS total_visualizacoes,
-       COUNT(v."usuario_id") AS espectadores_distintos,
-       ROUND(AVG(v."nota"), 2)        AS nota_media,
-       COUNT(a."id")                  AS total_reviews
+       COUNT(v."id") AS total_visualizacoes,
+       COUNT(DISTINCT v."usuario_id") AS espectadores_distintos,
+       ROUND(AVG(v."nota"), 2) AS nota_media,
+       COUNT(a."id") AS total_reviews
 FROM "filmes" f
 LEFT JOIN "visualizacoes" v ON v."filme_id" = f."id"
-LEFT JOIN "avaliacoes" a    ON a."visualizacao_id" = v."id"
+LEFT JOIN "avaliacoes" a ON a."visualizacao_id" = v."id"
 GROUP BY f."id", f."titulo", f."ano_lancamento";
 
 -- Consulta usando a view:
