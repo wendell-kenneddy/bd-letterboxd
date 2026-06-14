@@ -27,14 +27,14 @@ INSERT INTO "generos" ("nome") VALUES
   ('Suspense'),
   ('Romance');
 
--- Seed dos usuários. O campo de senha_hash "imita" um hash gerado pela biblioteca BCrypt.
+-- Seed dos usuários. O senha_hash é um hash bcrypt real gerado pelo pgcrypto (crypt + gen_salt).
 INSERT INTO "usuarios" ("apelido", "primeiro_nome", "sobrenome", "email", "senha_hash", "bio") VALUES
-  ('cinefilo_wk',  'Wendell',  'Kenneddy', 'wendell@example.com', '$2b$12$abcdefghijklmnopqrstuv01', 'Maratonando clássicos.'),
-  ('jv_filmes',    'Jeremias', 'Victor',   'jeremias@example.com', '$2b$12$abcdefghijklmnopqrstuv02', 'Fã de ficção científica.'),
-  ('ana.reviews',  'Ana',      'Souza',    'ana@example.com',      '$2b$12$abcdefghijklmnopqrstuv03', NULL),                      
-  ('bruno_movies', 'Bruno',    'Lima',     'bruno@example.com',    '$2b$12$abcdefghijklmnopqrstuv04', 'Crítico amador.'),         
-  ('carla_c',      'Carla',    'Mendes',   'carla@example.com',    '$2b$12$abcdefghijklmnopqrstuv05', 'Listas temáticas.'),       
-  ('diego.f',      'Diego',    'Ferreira', 'diego@example.com',    '$2b$12$abcdefghijklmnopqrstuv06', NULL);                      
+  ('cinefilo_wk',  'Wendell',  'Kenneddy', 'wendell@example.com',  crypt('senha-cinefilo_wk',  gen_salt('bf')), 'Maratonando clássicos.'),
+  ('jv_filmes',    'Jeremias', 'Victor',   'jeremias@example.com', crypt('senha-jv_filmes',    gen_salt('bf')), 'Fã de ficção científica.'),
+  ('ana.reviews',  'Ana',      'Souza',    'ana@example.com',      crypt('senha-ana.reviews',  gen_salt('bf')), NULL),
+  ('bruno_movies', 'Bruno',    'Lima',     'bruno@example.com',    crypt('senha-bruno_movies', gen_salt('bf')), 'Crítico amador.'),
+  ('carla_c',      'Carla',    'Mendes',   'carla@example.com',    crypt('senha-carla_c',      gen_salt('bf')), 'Listas temáticas.'),
+  ('diego.f',      'Diego',    'Ferreira', 'diego@example.com',    crypt('senha-diego.f',      gen_salt('bf')), NULL);
 
 -- Seed dos relacionamentos de seguir e ser seguido
 INSERT INTO "usuarios_seguidores" ("usuario_seguido", "usuario_seguidor") VALUES
@@ -140,7 +140,7 @@ INSERT INTO "listas_filmes" ("lista_id", "filme_id", "posicao") VALUES
   (5, 4, 1),
   (6, 2, 1), (6, 6, 2);
 
--- Seed de filmes que um usuário deseja assisti
+-- Seed de filmes que um usuário deseja assistir
 INSERT INTO "watchlist" ("usuario_id", "filme_id") VALUES
   (1, 3), (1, 7),
   (2, 4), (2, 5),

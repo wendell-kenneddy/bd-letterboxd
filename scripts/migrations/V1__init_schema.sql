@@ -1,3 +1,6 @@
+-- Habilita o módulo de criptografia padrão do Postgres (necessário antes do seed e das funções de autenticação)
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
 CREATE TABLE "usuarios" (
   "id" INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   "apelido" VARCHAR(128) UNIQUE NOT NULL,

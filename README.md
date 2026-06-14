@@ -17,6 +17,16 @@ Mapeamento do diagrama ER para o modelo relacional: definição das tabelas, cha
 - População das tabelas com dados coerentes e representativos. Mínimo de 5 tuplas por tabela principal e 10 tuplas em tabelas de fato/associativas. Os dados devem cobrir casos de borda relevantes para as consultas planejadas.
 - Desenvolvimento de no mínimo 10 consultas que demonstrem domínio progressivo: seleções simples, junções (INNER, LEFT, RIGHT), subconsultas correlacionadas e não-correlacionadas, funções de agregação com GROUP BY/HAVING, operadores de conjunto e ao menos uma view.
 
+## Requisitos Pt.2
+
+Dando continuidade ao projeto iniciado nas etapas anteriores esta atividade propõe evoluir o sistema para um ambiente mais próximo do produtivo, incorporando práticas de segurança, desempenho e resiliência operacional.
+
+- Índices: identifiquem atributos que podem se tornar índices para otimizar consultas;
+- RBAC: identifiquem ao menos três perfis de usuário relevantes para o domínio do projeto (ex.: administrador, operador de leitura, analista). Criem as ROLES correspondentes no banco e concedam apenas os privilégios necessários a cada papel;
+- Segurança e controle de acesso: Criem ao menos uma VIEW que limite colunas e/ou linhas visíveis para perfis restritos, ocultando, por exemplo, dados pessoais, financeiros ou confidenciais do domínio. O perfil restrito só deve acessar os dados via view, sem acesso direto à tabela base.
+- Criptografia de dados sensíveis: Identifiquem pelo menos um campo sensível no schema (ex.: CPF, senha, número de cartão). Apliquem criptografia ou hashing no armazenamento desse dado usando recursos nativos do SGBD (ex.: pgcrypto no PostgreSQL).
+
+
 ## Estrutura
 
 - O diretório `scripts/migrations` possui os scripts SQL de criação e evolução do schema;

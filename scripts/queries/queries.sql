@@ -110,3 +110,7 @@ GROUP BY f."id", f."titulo", f."ano_lancamento";
 SELECT *
 FROM "vw_estatisticas_filmes"
 ORDER BY "nota_media" DESC NULLS LAST, "total_visualizacoes" DESC;
+
+-- Verificação de login via função SECURITY DEFINER: o viewer não acessa "usuarios" diretamente.
+-- A função re-aplica o salt armazenado no hash internamente e retorna id + apelido se as credenciais forem válidas.
+SELECT * FROM autenticar_usuario('wendell@example.com', 'senha-cinefilo_wk');
