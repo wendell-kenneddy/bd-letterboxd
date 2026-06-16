@@ -97,7 +97,7 @@ AS $$
     INSERT INTO "usuarios" ("apelido", "primeiro_nome", "sobrenome", "email", "senha_hash", "bio")
     VALUES (p_apelido, p_primeiro_nome, p_sobrenome, p_email,
             crypt(p_senha, gen_salt('bf')), p_bio)
-    RETURNING "id";
+    RETURNING "id"
 $$;
 
 -- Login: recebe credenciais, retorna id e apelido se válidas, nenhuma linha se inválidas.
@@ -112,7 +112,7 @@ AS $$
     SELECT u."id", u."apelido"
     FROM "usuarios" u
     WHERE u."email" = p_email
-    AND u."senha_hash" = crypt(p_senha, u."senha_hash");
+    AND u."senha_hash" = crypt(p_senha, u."senha_hash")
 $$;
 
 -- Apenas o viewer pode chamar as funções; ninguém mais precisa

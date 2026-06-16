@@ -1,3 +1,22 @@
+-- Limpeza das tabelas para garantir a idempotência do seed
+TRUNCATE TABLE 
+  "avaliacoes",
+  "visualizacoes",
+  "watchlist",
+  "listas_filmes",
+  "listas",
+  "filmes_atores",
+  "filmes_generos",
+  "filmes_diretores",
+  "filmes",
+  "generos",
+  "personalidades",
+  "usuarios_seguidores",
+  "usuarios",
+  "idiomas",
+  "paises"
+  RESTART IDENTITY CASCADE;
+
 -- Seed dos países
 INSERT INTO "paises" ("codigo", "nome") VALUES
   ('USA', 'Estados Unidos'),
